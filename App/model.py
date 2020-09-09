@@ -336,3 +336,11 @@ def compareYears(year1, year2):
         return 1
     else:
         return 0
+def funcionmelaparaimprimir(catalog,n):
+    d = catalog['Movies'][n]["original_title"]
+    w = catalog['Movies'][n]["release_date"]
+    o = catalog['Movies'][n]["vote_average"]
+    s = catalog['Movies'][n]["vote_count"]
+    h = catalog['Movies'][n]["spoken_languages"]
+    print(d,w,o,s,h)
+        

@@ -38,7 +38,7 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-Moviesfile = 'GoodMovies/MoviesCastingRaw-small.csv'
+Moviesfile = 'GoodMovies/AllMoviesDetailsCleaned.csv'
 tagsfile = 'GoodMovies/tags.csv'
 Movietagsfile = 'GoodMovies/Movie_tags-small.csv'
 # ___________________________________________________

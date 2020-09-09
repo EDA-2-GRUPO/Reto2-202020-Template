@@ -63,20 +63,20 @@ def loadData(catalog, Moviesfile, tagsfile, Movietagsfile):
     loadMoviesTags(catalog, Movietagsfile)"""
 
 def transformar(input_file, catalog):
-    lista = lt.newList('ARRAY_LIST')
     for Movie in input_file:
         for key, value in Movie.items():
              i = str(value)
              w = str(key)
-             listak = w.split(";")
-              
+             listak = w.split(";") 
              listav = i.split(";")
-             model.addMovie(catalog, listak)
-             if len(listam) ==19:
-              model.addMovieAuthor(catalog, author.strip(), listak)
-             if len(listam) !=19:
-                 print(listam, len(listam))
-    return lista
+             n = -1
+             x= lt.newList()
+             for a in listav:
+                 n+=1
+                 w = map.newMap()
+                 map.put(w,listak[n],a)             
+                 lt.addFirst(x, w)
+             model.addMovie(catalog, x)
 def loadMovies(catalog, Moviesfile):
     """
     Carga cada una de las lineas del archivo de Peliculas.
@@ -87,8 +87,6 @@ def loadMovies(catalog, Moviesfile):
     Moviesfile = cf.data_dir + Moviesfile
     input_file = csv.DictReader(open(Moviesfile,encoding ="utf-8-sig"))
     w = transformar(input_file,catalog)
-    for a in w:
-        model.addMovie(catalog, a)
 
 
 def loadTags(catalog, tagsfile):
