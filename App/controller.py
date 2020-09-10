@@ -37,6 +37,13 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
+def initCatalog():
+    """
+    Llama la funcion de inicializacion del catalogo del modelo.
+    """
+    # catalog es utilizado para interactuar con el modelo
+    catalog = model.newCatalog()
+    return catalog
 
 
 
@@ -44,3 +51,22 @@ recae sobre el controlador.
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+def loadData(catalog, booksfile, tagsfile, booktagsfile):
+    """
+    Carga los datos de los archivos en el modelo
+    """
+    loadMovies(catalog, booksfile)
+
+
+def loadMovies(catalog, movies_file):
+    """
+    Carga cada una de las lineas del archivo de libros.
+    - Se agrega cada libro al catalogo de libros
+    - Por cada libro se encuentran sus autores y por cada
+      autor, se crea una lista con sus libros
+    """
+    movies_file = cf.data_dir + movies_file
+    input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"))
+    for book in input_file:
+        model.addMovie(catalog, book)
+

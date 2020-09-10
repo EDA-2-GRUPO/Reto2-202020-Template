@@ -38,8 +38,7 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-
-
+movies_file = "Data/Movies/"
 
 
 # ___________________________________________________
@@ -47,7 +46,6 @@ operación seleccionada.
 #  respuesta.  La vista solo interactua con
 #  el controlador.
 # ___________________________________________________
-
 
 
 # ___________________________________________________
