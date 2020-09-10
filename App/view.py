@@ -39,7 +39,7 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-movies_file = "Movies/SmallMoviesDetailsCleaned.csv"
+movies_file = "GoodMovies/SmallMoviesDetailsCleaned.csv"
 
 
 # ___________________________________________________
@@ -73,7 +73,9 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
         controller.loadData(cont, movies_file)
-
-
+        w=controller.MoviesSize(cont)
+        print("Numero de Peliculas cargadas"+str(w))
+        controller.Print(cont,0)
+        controller.Print(cont,w)
     else:
         break

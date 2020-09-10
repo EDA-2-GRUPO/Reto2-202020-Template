@@ -67,7 +67,13 @@ def loadMovies(catalog, movies_file):
     dialect = csv.excel()
     dialect.delimiter = ";"
     movies_file = cf.data_dir + movies_file
-
     input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"), dialect=dialect)
     for movie in input_file:
         model.addMovie(catalog, movie)
+def MoviesSize(catalog):
+    """Numero de libros leido
+    """
+    return model.MoviesSize(catalog)
+def Print(catalog, n):
+
+    return model.Print(catalog, n)

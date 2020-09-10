@@ -68,7 +68,7 @@ def addMovie(catalog, movie):
     Finalmente crea una entrada en el Map de años, para indicar que este
     libro fue publicaco en ese año.
     """
-
+    
     lt.addLast(catalog['movies'], movie)
     mp.put(catalog['moviesIds'], int(movie['id']), movie)
 
@@ -108,6 +108,21 @@ def compareMapMoviesIds(id, entry):
         return 1
     else:
         return -1
+
+def MoviesSize(catalog):
+    """
+    Número de libros en el catago
+    """
+    return lt.size(catalog['movies'])
+
+def Print(catalog, n):
+    print("Pelicula numero:  "+str(n+1))
+    s = lt.getElement(catalog["movies"], n)
+    print("original_title:  "+str(s["original_title"]))
+    print("release_date: "+str(s["release_date"]))
+    print("vote_average: "+str(s["vote_average"]))
+    print("vote_count: "+ str(s["vote_count"]))
+    print("spoken_languages: "+str(s["spoken_languages"]))
 
 
 
