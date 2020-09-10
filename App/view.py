@@ -57,10 +57,18 @@ def printMenu():
     print("5- Consultar los Libros por etiqueta")
     print("0- Salir")
 
-
+def Printn_Movie(catalog, n): 
+    s = lt.getElement(catalog["movies"], n)
+    print("id de Pelicula:  "+str(s["id"]))
+    print("original_title:  "+str(s["original_title"]))
+    print("release_date: "+str(s["release_date"]))
+    print("vote_average: "+str(s["vote_average"]))
+    print("vote_count: "+ str(s["vote_count"]))
+    print("spoken_languages: "+str(s["spoken_languages"]))
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
@@ -75,7 +83,7 @@ while True:
         controller.loadData(cont, movies_file)
         w=controller.MoviesSize(cont)
         print("Numero de Peliculas cargadas"+str(w))
-        controller.Print(cont,0)
-        controller.Print(cont,w)
+        Printn_Movie(cont,0)
+        Printn_Movie(cont,w)
     else:
         break

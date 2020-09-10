@@ -74,6 +74,3 @@ def MoviesSize(catalog):
     """Numero de libros leido
     """
     return model.MoviesSize(catalog)
-def Print(catalog, n):
-
-    return model.Print(catalog, n)

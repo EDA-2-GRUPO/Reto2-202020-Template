@@ -115,14 +115,7 @@ def MoviesSize(catalog):
     """
     return lt.size(catalog['movies'])
 
-def Print(catalog, n):
-    print("Pelicula numero:  "+str(n+1))
-    s = lt.getElement(catalog["movies"], n)
-    print("original_title:  "+str(s["original_title"]))
-    print("release_date: "+str(s["release_date"]))
-    print("vote_average: "+str(s["vote_average"]))
-    print("vote_count: "+ str(s["vote_count"]))
-    print("spoken_languages: "+str(s["spoken_languages"]))
+
 
 
 
