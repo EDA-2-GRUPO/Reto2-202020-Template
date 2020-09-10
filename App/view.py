@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
+
 assert config
 
 """
@@ -38,8 +39,7 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-
-
+movies_file = "Movies/SmallMoviesDetailsCleaned.csv"
 
 
 # ___________________________________________________
@@ -48,8 +48,32 @@ operación seleccionada.
 #  el controlador.
 # ___________________________________________________
 
+def printMenu():
+    print("Bienvenido")
+    print("1- Inicializar Catálogo")
+    print("2- Cargar información en el catálogo")
+    print("3- Consultar los libros de un año")
+    print("4- Consultar los libros de un autor")
+    print("5- Consultar los Libros por etiqueta")
+    print("0- Salir")
 
 
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+
+    if int(inputs[0]) == 1:
+        print("Inicializando Catálogo ....")
+        # cont es el controlador que se usará de acá en adelante
+        cont = controller.initCatalog()
+
+    elif int(inputs[0]) == 2:
+        print("Cargando información de los archivos ....")
+        controller.loadData(cont, movies_file)
+
+
+    else:
+        break

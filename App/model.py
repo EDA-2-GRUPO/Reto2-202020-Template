@@ -23,6 +23,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+
 assert config
 
 """
@@ -31,14 +32,45 @@ es decir contiene los modelos con los datos en memoria
 
 """
 
+
 # -----------------------------------------------------
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
+def newCatalog():
+    """ Inicializa el catálogo de libros
 
+    Crea una lista vacia para guardar todos los libros
+
+    Se crean indices (Maps) por los siguientes criterios:
+    Autores
+    ID libros
+    Tags
+    Año de publicacion
+
+    Retorna el catalogo inicializado.
+    """
+    catalog = dict()
+
+    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
+    catalog['moviesIds'] = mp.newMap(300,
+                                     maptype='PROBING',
+                                     loadfactor=0.4,
+                                     comparefunction=compareMapMoviesIds)
+
+    return catalog
 
 
 # Funciones para agregar informacion al catalogo
+def addMovie(catalog, movie):
+    """
+    Esta funcion adiciona un libro a la lista de libros,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    Finalmente crea una entrada en el Map de años, para indicar que este
+    libro fue publicaco en ese año.
+    """
 
+    lt.addLast(catalog['movies'], movie)
+    mp.put(catalog['moviesIds'], int(movie['id']), movie)
 
 
 # ==============================
@@ -46,9 +78,36 @@ es decir contiene los modelos con los datos en memoria
 # ==============================
 
 
-
 # ==============================
 # Funciones de Comparacion
 # ==============================
+
+def compareMoviesIds(id1, id2):
+    """
+    Compara dos ids de libros
+    """
+    id1 = int(id1)
+    id2 = int(id2)
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+
+
+def compareMapMoviesIds(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if int(id) == int(identry):
+        return 0
+    elif int(id) > int(identry):
+        return 1
+    else:
+        return -1
+
 
 
