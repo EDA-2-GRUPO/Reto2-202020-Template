@@ -39,7 +39,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-movies_file = "Movies/SmallMoviesDetailsCleaned.csv"
+movies_file_Details = "Movies/SmallMoviesDetailsCleaned.csv"
+movies_file_Casting = "Movies/MoviesCastinRaw-small.csv"
 
 
 # ___________________________________________________
@@ -61,19 +62,22 @@ def printMenu():
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
-while True:
-    printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+def menu():
+    ejecutando = True
+    while ejecutando = True:
+        printMenu()
+        opcion = input('Seleccione una opción para continuar: ')
 
-    if int(inputs[0]) == 1:
-        print("Inicializando Catálogo ....")
-        # cont es el controlador que se usará de acá en adelante
-        cont = controller.initCatalog()
+        if int(opcion[0]) == 1:
+            print("Inicializando Catálogo...")
+            # cont es el controlador que se usará de acá en adelante
+            cont = controller.initCatalog()
 
-    elif int(inputs[0]) == 2:
-        print("Cargando información de los archivos ....")
-        controller.loadData(cont, movies_file)
+        elif int(opcion[0]) == 2:
+            print("Cargando datos, espere un momento...")
+            controller.loadData(cont, movies_file_Details)
 
+        else:
+            ejecutando = False
 
-    else:
-        break
+menu()
