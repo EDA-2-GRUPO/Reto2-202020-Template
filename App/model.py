@@ -23,6 +23,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import listiterator as it
 
 assert config
 
@@ -51,12 +52,15 @@ def newCatalog():
     """
     catalog = dict()
 
-    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds)
+    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds) 
     catalog['moviesIds'] = mp.newMap(300,
                                      maptype='PROBING',
                                      loadfactor=0.4,
                                      comparefunction=compareMapMoviesIds)
-
+    catalog['productoras'] = mp.newMap(500,
+                                 maptype='CHAINING',
+                                 loadfactor=0.7,
+                                 comparefunction=compareMapProductora)
     return catalog
 
 
@@ -71,7 +75,63 @@ def addMovie(catalog, movie):
     
     lt.addLast(catalog['movies'], movie)
     mp.put(catalog['moviesIds'], int(movie['id']), movie)
+    addMovieproductora(catalog, movie)
 
+def compareMapProductora(name, product):
+    proentry = me.getKey(product)
+    if (name == proentry):
+        return 0
+    elif (name > proentry):
+        return 1
+    else:
+        return -1
+
+
+def addMovieproductora(catalog, movie):
+    """
+    Esta funcion adiciona un libro a la lista de libros que
+    fueron publicados en un año especifico.
+    Los años se guardan en un Map, donde la llave es el año
+    y el valor la lista de libros de ese año.
+    """
+    productora = catalog['productoras']
+    producmo = movie["production_companies"]
+    existpro = mp.contains(productora, producmo)
+    if existpro:
+        entry = mp.get(productora, producmo)
+        pro = me.getValue(entry)
+    else:
+        pro = newproductora(producmo)
+        mp.put(productora, producmo, pro)
+    lt.addLast(pro['movies'], movie)
+def newproductora(pubyear):
+    """
+    Esta funcion crea la estructura de libros asociados
+    a un año.
+    """
+    entry = {'productora': "", "movies": None}
+    entry['productora'] = pubyear
+    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
+    return entry
+
+"""def rq1(cont,estudio,key):
+    s = cont["movies"]
+    w=lt.newList('ARRAY_LIST')
+    contador_depel= 0                    #solucion mediante listas
+    promediode_pel=0
+    final=lt.newList('ARRAY_LIST')
+    iterator = it.newIterator(s)
+    while it.hasNext(iterator):
+        element = it.next(iterator)
+        if element[key].lower()==estudio: 
+            promediode_pel+=float(element["vote_average"])
+            lt.addLast(w, element)
+            contador_depel+=1
+    promediode_pel = round(promediode_pel/contador_depel,2)
+    lt.addLast(final, w)
+    lt.addLast(final, contador_depel)
+    lt.addLast(final, promediode_pel)
+    return final"""
 
 # ==============================
 # Funciones de consulta
@@ -114,6 +174,19 @@ def MoviesSize(catalog):
     Número de libros en el catago
     """
     return lt.size(catalog['movies'])
+
+
+def getMoviebyproductoras(catalog, productora):
+    """
+    Retorna los peliculas publicadas por una productora
+    """
+    pro = mp.get(catalog["productoras"], productora)
+    if pro:
+        return me.getValue(pro)
+    return None
+    
+
+
 
 
 
