@@ -74,3 +74,9 @@ def MoviesSize(catalog):
     """Numero de libros leido
     """
     return model.MoviesSize(catalog)
+def rq1(cont,estudio,key):
+    return model.rq1(cont,estudio,key)
+def get_productoras(catalog, productora):
+    
+    productora = model.getMoviebyproductoras(catalog, productora)
+    return productora
