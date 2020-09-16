@@ -98,6 +98,29 @@ def put(map, key, value):
     return map
 
 
+def rehash(map, resize="BIGGER"):
+    actual_number = map["size"]
+    load = map["loadfactor"]
+    prime = map["prime"]
+    cmp = map["comparefunction"]
+
+    if resize == "BIGGER":
+        nuevo = newMap(actual_number * 2, prime, load, cmp)
+    elif resize == "SMALLER":
+        nuevo = newMap(actual_number / 2, prime, load, cmp)
+    else:
+        print("resize no valido")
+        return None
+
+    for pos in range(lt.size(map['table'])):
+        entry = lt.getElement(map['table'], pos+1)
+        if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
+            put(nuevo,['key'],entry['value'])
+
+    map = nuevo
+
+    return None
+
 def contains(map, key):
     """ Retorna True si la llave key se encuentra en el map
         o False en caso contrario.
