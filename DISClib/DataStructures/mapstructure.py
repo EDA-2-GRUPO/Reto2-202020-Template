@@ -20,10 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-
 import config
 from DISClib.DataStructures import chaininghashtable as cht
 from DISClib.DataStructures import probehashtable as pht
+
 assert config
 
 """
@@ -61,6 +61,13 @@ def newMap(numelements=17,
                           prime,
                           loadfactor,
                           comparefunction)
+
+
+def rehash(map, resize="BIGGER") -> None:
+    if map['type'] == 'CHAINING':
+        cht.rehash(map, resize)
+    else:
+        pht.rehash(map, resize)
 
 
 def put(map, key, value):
