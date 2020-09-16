@@ -25,6 +25,7 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
+from DISClib.ADT import map as mp
 
 assert config
 
@@ -52,7 +53,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Inicializar Catálogo")
     print("2- Cargar información en el catálogo")
-    print("3- Consultar los libros de un año")
+    print("3- Descubrir productoras de cine")
     print("4- Consultar los libros de un autor")
     print("5- Consultar los Libros por etiqueta")
     print("0- Salir")
@@ -65,6 +66,29 @@ def Printn_Movie(catalog, n):
     print("vote_average: "+str(s["vote_average"]))
     print("vote_count: "+ str(s["vote_count"]))
     print("spoken_languages: "+str(s["spoken_languages"]))
+def printMoviesbyproductora(movies):
+    """
+    Imprime los libros de un autor determinado
+    """
+    if movies:
+        print('productora encontrada: ' + movies['productora'])
+        iterator = it.newIterator(movies['movies'])
+        s = 0
+        w=0
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            """print(movie)
+            print("----------------------------")
+            print("\n\n\n\n\n\n")"""
+            w+=1
+            s+=float(movie["vote_average"])
+            print(movie["original_title"])
+        print(w)
+        print(round(s/w,2))    
+    else:
+        print('No se encontro el autor')
+
+
 # ___________________________________________________
 #  Menu principal
 # ___________________________________________________
@@ -85,5 +109,18 @@ while True:
         print("Numero de Peliculas cargadas"+str(w))
         Printn_Movie(cont,0)
         Printn_Movie(cont,w)
+    elif int(inputs[0]) == 3:
+        print("Cargando...")
+        estudio = input("estudio que desea ver\n")
+        movies = controller.get_productoras(cont, estudio)
+        printMoviesbyproductora(movies)
+        
+    elif int(inputs[0]) == 4:
+        s=cont["productoras"]
+        print(mp.get(s,"Lucasfilm"))
+        
+        """keyskeys= keys.keys()
+        print(keyskeys)"""
+        
     else:
         break
