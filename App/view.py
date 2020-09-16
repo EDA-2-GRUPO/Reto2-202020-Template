@@ -73,18 +73,15 @@ def printMoviesbyproductora(movies):
     if movies:
         print('productora encontrada: ' + movies['productora'])
         iterator = it.newIterator(movies['movies'])
-        s = 0
+        s=0
         w=0
         while it.hasNext(iterator):
             movie = it.next(iterator)
-            """print(movie)
-            print("----------------------------")
-            print("\n\n\n\n\n\n")"""
             w+=1
             s+=float(movie["vote_average"])
             print(movie["original_title"])
-        print(w)
-        print(round(s/w,2))    
+        print("Numero de peliculas"+str(w))
+        print("vote_average"+str(round(s/w,2)))    
     else:
         print('No se encontro el autor')
 
@@ -118,9 +115,5 @@ while True:
     elif int(inputs[0]) == 4:
         s=cont["productoras"]
         print(mp.get(s,"Lucasfilm"))
-        
-        """keyskeys= keys.keys()
-        print(keyskeys)"""
-        
     else:
         break
