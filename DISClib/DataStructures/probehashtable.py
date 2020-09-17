@@ -71,6 +71,7 @@ def newMap(numelements, prime, loadfactor, comparefunction):
                  'scale': scale,
                  'shift': shift,
                  'table': table,
+                 'loadfactor': loadfactor,
                  'comparefunction': comparefunction,
                  'size': 0,
                  'type': 'PROBING'}
@@ -118,9 +119,7 @@ def rehash(map, resize="BIGGER"):
         if entry['key'] is not None and entry['key'] != '__EMPTY__':
             put(nuevo, entry['key'], entry['value'])
 
-    map = nuevo
-
-    return None
+    return nuevo
 
 
 def contains(map, key):

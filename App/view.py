@@ -54,8 +54,6 @@ def printMenu():
     print("1- Inicializar Catálogo")
     print("2- Cargar información en el catálogo")
     print("3- Descubrir productoras de cine")
-    print("4- Consultar los libros de un autor")
-    print("5- Consultar los Libros por etiqueta")
     print("0- Salir")
 
 def Printn_Movie(catalog, n): 
@@ -66,6 +64,8 @@ def Printn_Movie(catalog, n):
     print("vote_average: "+str(s["vote_average"]))
     print("vote_count: "+ str(s["vote_count"]))
     print("spoken_languages: "+str(s["spoken_languages"]))
+
+
 def printMoviesbyproductora(movies):
     """
     Imprime los libros de un autor determinado
@@ -73,15 +73,15 @@ def printMoviesbyproductora(movies):
     if movies:
         print('productora encontrada: ' + movies['productora'])
         iterator = it.newIterator(movies['movies'])
-        s=0
-        w=0
+        s = 0
+        w = 0
         while it.hasNext(iterator):
             movie = it.next(iterator)
             w+=1
             s+=float(movie["vote_average"])
             print(movie["original_title"])
         print("Numero de peliculas"+str(w))
-        print("vote_average"+str(round(s/w,2)))    
+        print("vote_average"+str(round(s/w,2)))
     else:
         print('No se encontro el autor')
 
@@ -106,14 +106,11 @@ while True:
         print("Numero de Peliculas cargadas"+str(w))
         Printn_Movie(cont,0)
         Printn_Movie(cont,w)
+
     elif int(inputs[0]) == 3:
         print("Cargando...")
         estudio = input("estudio que desea ver\n")
         movies = controller.get_productoras(cont, estudio)
         printMoviesbyproductora(movies)
-        
-    elif int(inputs[0]) == 4:
-        s=cont["productoras"]
-        print(mp.get(s,"Lucasfilm"))
     else:
         break

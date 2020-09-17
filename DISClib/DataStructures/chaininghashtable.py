@@ -25,7 +25,7 @@ import math
 import config
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import liststructure as lt
-from DISClib.DataStructures import listiterator as it
+
 assert config
 
 """
@@ -77,29 +77,29 @@ def newMap(numelements, prime, loadfactor, cmpfunction):
     return hashtable
 
 
-def rehash(map, resize="BIGGER"):
-    actual_number = map["size"]
-    load = map["loadfactor"]
-    prime = map["prime"]
-    cmp = map["comparefunction"]
+def rehash(map_, resize="BIGGER"):
+
+    actual_number = map_["size"]
+    load = map_["loadfactor"]
+    prime = map_["prime"]
+    cmp = map_["comparefunction"]
+
 
     if resize == "BIGGER":
+        print("antes", actual_number)
         nuevo = newMap(actual_number * 2, prime, load, cmp)
-    elif resize == "SMALLER":
-        nuevo = newMap(actual_number / 2, prime, load, cmp)
-    else:
-        print("resize no valido")
-        return None
+        print("despues", nuevo["capacity"])
 
-    for pos in range(lt.size(map['table'])):
-        bucket = lt.getElement(map['table'], pos + 1)
+
+    for pos in range(lt.size(map_['table'])):
+        bucket = lt.getElement(map_['table'], pos + 1)
         for element in range(lt.size(bucket)):
             entry = lt.getElement(bucket, element + 1)
-            put(nuevo,entry['key'],entry['value'])
+            nuevo = put(nuevo, entry['key'], entry['value'])
 
-    map = nuevo
+    print("2rehash",nuevo["capacity"], nuevo["size"])
 
-    return None
+    return nuevo
 
 
 def contains(map, key):
@@ -124,12 +124,13 @@ def contains(map, key):
         return False
 
 
-def put(map, key, value):
+def put(map_, key, value):
+
     """ Ingresa una pareja llave,valor a la tabla de hash.
     Si la llave ya existe en la tabla, se reemplaza el valor
 
     Args:
-        map: El map a donde se guarda la pareja
+        map_: El map a donde se guarda la pareja
         key: la llave asociada a la pareja
         value: el valor asociado a la pareja
     Returns:
@@ -137,17 +138,21 @@ def put(map, key, value):
     Raises:
         Exception
     """
-    hash = hashValue(map, key)
-    bucket = lt.getElement(map['table'], hash)
+
+    hash = hashValue(map_, key)
+    bucket = lt.getElement(map_['table'], hash)
     entry = me.newMapEntry(key, value)
     pos = lt.isPresent(bucket, key)
+
+
     if pos > 0:  # La pareja ya exista, se reemplaza el valor
         lt.changeInfo(bucket, pos, entry)
     else:
         lt.addLast(bucket, entry)  # La llave no existia
-        map['size'] += 1
-    return map
+        map_['size'] += 1
 
+
+    return map_
 
 def get(map, key):
     """ Retorna la pareja llave, valor, cuya llave sea igual a key
