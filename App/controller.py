@@ -68,6 +68,7 @@ def loadMovies(catalog, movies_file):
     dialect.delimiter = ";"
     movies_file = cf.data_dir + movies_file
     input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"), dialect=dialect)
+    print(type(input_file))
     for movie in input_file:
         model.addMovie(catalog, movie)
 def MoviesSize(catalog):

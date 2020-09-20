@@ -41,6 +41,7 @@ operación seleccionada.
 # ___________________________________________________
 
 movies_file = "GoodMovies/SmallMoviesDetailsCleaned.csv"
+movies_file_cast="GoodMovies/MoviesCastingRaw-small.csv"
 
 
 # ___________________________________________________
@@ -77,9 +78,6 @@ def printMoviesbyproductora(movies):
         w=0
         while it.hasNext(iterator):
             movie = it.next(iterator)
-            """print(movie)
-            print("----------------------------")
-            print("\n\n\n\n\n\n")"""
             w+=1
             s+=float(movie["vote_average"])
             print(movie["original_title"])
@@ -105,8 +103,11 @@ while True:
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
         controller.loadData(cont, movies_file)
+        controller.loadData(cont, movies_file_cast)
         w=controller.MoviesSize(cont)
+        
         print("Numero de Peliculas cargadas"+str(w))
+        
         Printn_Movie(cont,0)
         Printn_Movie(cont,w)
     elif int(inputs[0]) == 3:
@@ -118,9 +119,5 @@ while True:
     elif int(inputs[0]) == 4:
         s=cont["productoras"]
         print(mp.get(s,"Lucasfilm"))
-        
-        """keyskeys= keys.keys()
-        print(keyskeys)"""
-        
     else:
         break

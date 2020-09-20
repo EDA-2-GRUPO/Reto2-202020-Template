@@ -24,7 +24,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import listiterator as it
-
+import multiprocessing as mult
 assert config
 
 """
@@ -241,6 +241,8 @@ def getMoviebyproductoras(catalog, productora):
     if pro:
         return me.getValue(pro)
     return None
+def merge_movies(moviedetails, cast):
+    return 0
     
 
 
