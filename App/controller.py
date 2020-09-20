@@ -34,7 +34,6 @@ del modelo en una sola respuesta. Esta responsabilidad
 recae sobre el controlador.
 """
 
-
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________

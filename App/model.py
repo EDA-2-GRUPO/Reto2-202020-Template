@@ -23,7 +23,6 @@ import config
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import mapstructure as mp
 from DISClib.DataStructures import mapentry as me
-
 assert config
 
 """
@@ -31,7 +30,6 @@ En este archivo definimos los TADs que vamos a usar,
 es decir contiene los modelos con los datos en memoria
 
 """
-
 
 # -----------------------------------------------------
 # API del TAD Catalogo de Libros

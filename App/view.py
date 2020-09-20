@@ -42,6 +42,8 @@ operación seleccionada.
 
 
 
+
+
 # ___________________________________________________
 #  Funciones para imprimir la inforamación de
 #  respuesta.  La vista solo interactua con
