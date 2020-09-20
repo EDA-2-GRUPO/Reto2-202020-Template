@@ -21,9 +21,8 @@
  """
 import config
 from DISClib.ADT import list as lt
-from DISClib.ADT import map as mp
+from DISClib.DataStructures import mapstructure as mp
 from DISClib.DataStructures import mapentry as me
-from DISClib.DataStructures import mapstructure as mp1
 
 assert config
 
@@ -38,7 +37,7 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de Libros
 # -----------------------------------------------------
 
-def newCatalog():
+def newCatalog(map_type="CHAINING", loadfactor=None):
     """ Inicializa el catálogo de libros
 
     Crea una lista vacia para guardar todos los libros
@@ -51,52 +50,62 @@ def newCatalog():
 
     Retorna el catalogo inicializado.
     """
+    if loadfactor is None:
+        if map_type == "PROBING":
+            loadfactor = 0.4
+        elif map_type == "CHAINING":
+            loadfactor = 0.9
+        else:
+            return None
+
     catalog = dict()
 
-    catalog['movies'] = lt.newList()
-    catalog['moviesIds'] = mp.newMap(50,
-                                     maptype='PROBING',
-                                     loadfactor=0.4,
-                                     comparefunction=compareMapMoviesIds)
+    catalog['ids'] = mp.newMap(300, maptype='PROBING',
+                               loadfactor= 0.4,
+                               comparefunction=compareMapMoviesIds)
 
-    catalog['productoras'] = mp.newMap(50,
-                                 maptype='CHAINING',
-                                 loadfactor= 0.7,
-                                 comparefunction= compareMapProductora)
+    catalog['productoras'] = mp.newMap(100,
+                                       maptype=map_type,
+                                       loadfactor=0.7,
+                                       comparefunction=compareMapProductora)
 
+    catalog['Actors'] = mp.newMap(400,
+                                  maptype=map_type,
+                                  loadfactor=0.7,
+                                  comparefunction=compareMapProductora)
 
     return catalog
 
 
 # Funciones para agregar informacion al catalogo
-def addMovie(catalog, movie):
+def add_ids(catalog, movie, pase = True):
     """
     Esta funcion adiciona un libro a la lista de libros,
     adicionalmente lo guarda en un Map usando como llave su Id.
     Finalmente crea una entrada en el Map de años, para indicar que este
     libro fue publicaco en ese año.
     """
-    
-    lt.addLast(catalog['movies'], movie)
-    ids = catalog['moviesIds']
-    mp.put(ids, int(movie['id']), movie)
-    if ids['size'] / ids['capacity'] > ids['loadfactor']:
-        catalog['moviesIds'] = mp1.rehash(ids)
-    addMovieproductora(catalog, movie)
 
-
-def compareMapProductora(name, product):
-    proentry = me.getKey(product)
-    if (name == proentry):
-        return 0
-    elif (name > proentry):
-        return 1
+    ids = catalog['ids']
+    id = int(movie["id"])
+    if pase:
+        mp.put(ids, id, movie)
+        if ids['size'] / ids['capacity'] > ids['loadfactor']:
+            print(ids['size'])
+            catalog['ids'] = mp.rehash(ids)
     else:
-        return -1
+        existpro = mp.contains(ids, id)
+        if existpro:
+            entry = mp.get(ids, id)
+            (me.getValue(entry)).update(movie)
+        else:
+            mp.put(ids, id, movie)
+            if ids['size'] / ids['capacity'] > ids['loadfactor']:
+                print(ids['size'])
+                catalog['ids'] = mp.rehash(ids)
 
 
 def addMovieproductora(catalog, movie):
-
     """
     Esta funcion adiciona un libro a la lista de libros que
     fueron publicados en un año especifico.
@@ -114,58 +123,61 @@ def addMovieproductora(catalog, movie):
     else:
         pro = newproductora(producmo)
         mp.put(productora, producmo, pro)
-        if productora['size']/productora['capacity'] > productora['loadfactor']:
-            catalog['productoras'] = mp1.rehash(productora)
+        if productora['size'] / productora['capacity'] > productora['loadfactor']:
+            catalog['productoras'] = mp.rehash(productora)
 
     lt.addLast(pro['movies'], movie)
 
 
-def newproductora(pubyear):
+def addActor(catalog, movie):
+    """
+    Esta funcion adiciona un libro a la lista de libros que
+    fueron publicados en un año especifico.
+    Los años se guardan en un Map, donde la llave es el año
+    y el valor la lista de libros de ese año.
+    """
+
+    C_Actors = catalog['Actors']
+    keys = ["actor1_name", "actor2_name", "actor3_name", "actor4_name", "actor5_name"]
+    actors = [movie[key] for key in keys]
+
+    for actor in actors:
+
+        existpro = mp.contains(C_Actors, actor)
+
+        if existpro:
+            entry = mp.get(C_Actors, actor)
+            act = me.getValue(entry)
+        else:
+            act = newActor(actor)
+            mp.put(C_Actors, actor, act)
+            if C_Actors['size'] / C_Actors['capacity'] > C_Actors['loadfactor']:
+                catalog['Actors'] = mp.rehash(C_Actors)
+
+        lt.addLast(act["movies"], movie)
+
+
+def newActor(actor):
+    entry = {'actor': "", "movies": None}
+    entry['actor'] = actor
+    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
+    return entry
+
+
+def newproductora(pr_name):
     """
     Esta funcion crea la estructura de libros asociados
     a un año.
     """
-    entry = {'productora': "", "movies": None}
-    entry['productora'] = pubyear
-    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
+    entry = {'actor': "", "movies": None}
+    entry['productora'] = pr_name
+    entry['movies'] = lt.newList('SINGLE_LINKED', compareMovieName)
     return entry
+
 
 # ==============================
 # Funciones de consulta
 # ==============================
-
-
-# ==============================
-# Funciones de Comparacion
-# ==============================
-
-def compareMoviesIds(id1, id2):
-    """
-    Compara dos ids de libros
-    """
-    id1 = int(id1)
-    id2 = int(id2)
-    if (id1 == id2):
-        return 0
-    elif id1 > id2:
-        return 1
-    else:
-        return -1
-
-
-def compareMapMoviesIds(id, entry):
-    """
-    Compara dos ids de libros, id es un identificador
-    y entry una pareja llave-valor
-    """
-    identry = me.getKey(entry)
-    if int(id) == int(identry):
-        return 0
-    elif int(id) > int(identry):
-        return 1
-    else:
-        return -1
-
 
 def MoviesSize(catalog):
     """
@@ -182,3 +194,59 @@ def getMoviebyproductoras(catalog, productora):
     if pro:
         return me.getValue(pro)
     return None
+
+
+# ==============================
+# Funciones de Comparacion
+# ==============================
+
+# ==============================
+# LIST
+# ==============================
+def compareMoviesIds(id1, id2):
+    """
+    Compara dos ids de libros
+    """
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+
+
+def compareMovieName(name1, name2):
+    if name1 == name2:
+        return 0
+    elif name1 > name2:
+        return 1
+    else:
+        return -1
+
+    # ==============================
+    # MAP
+    # ==============================
+
+
+def compareMapMoviesIds(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if int(id) == int(identry):
+        return 0
+    elif int(id) > int(identry):
+        return 1
+    else:
+        return -1
+
+
+def compareMapProductora(name, product):
+    proentry = me.getKey(product)
+    if (name == proentry):
+        return 0
+    elif (name > proentry):
+        return 1
+    else:
+        return -1

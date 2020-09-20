@@ -23,7 +23,9 @@
 import config as cf
 from App import model
 import csv
-
+from DISClib.DataStructures import mapstructure as mp
+from DISClib.DataStructures import listiterator as it
+from time import perf_counter
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -37,12 +39,12 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
-def initCatalog():
+def initCatalog(tipo_map, loadfactor):
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    catalog = model.newCatalog()
+    catalog = model.newCatalog(tipo_map, loadfactor)
     return catalog
 
 
@@ -50,14 +52,14 @@ def initCatalog():
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def loadData(catalog, booksfile):
+def loadData(catalog, file1, file2):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadMovies(catalog, booksfile)
+    loadMovies(catalog, file1,file2)
 
 
-def loadMovies(catalog, movies_file):
+def loadMovies(catalog, movies_file1, movies_file2):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
@@ -66,11 +68,32 @@ def loadMovies(catalog, movies_file):
     """
     dialect = csv.excel()
     dialect.delimiter = ";"
-    movies_file = cf.data_dir + movies_file
-    input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"), dialect=dialect)
-    for movie in input_file:
-        model.addMovie(catalog, movie)
+    movies_file1 = cf.data_dir + movies_file1
+    movies_file2 = cf.data_dir + movies_file2
 
+    input_file1 = csv.DictReader(open(movies_file1, encoding="utf-8-sig"), dialect=dialect)
+    input_file2 = csv.DictReader(open(movies_file2, encoding="utf-8-sig"), dialect=dialect)
+    t1 = perf_counter()
+    for movie in input_file1:
+        model.add_ids(catalog, movie)
+    t2 = perf_counter()
+    print("id1", t2-t1)
+    t1 = perf_counter()
+
+    for movie in input_file2:
+        model.add_ids(catalog, movie, False)
+    t2 = perf_counter()
+    print("id2", t2-t1)
+
+    t1 = perf_counter()
+    iterador = it.newIterator(mp.valueSet(catalog["ids"]))
+    ran = mp.size(catalog["ids"])
+    for i in range(ran):
+        movie = it.next(iterador)
+        model.addMovieproductora(catalog, movie)
+        model.addActor(catalog,movie)
+    t2 = perf_counter()
+    print("adds", t2 - t1)
 
 def MoviesSize(catalog):
     """Numero de libros leido
@@ -78,11 +101,6 @@ def MoviesSize(catalog):
     return model.MoviesSize(catalog)
 
 
-def rq1(cont, estudio, key):
-    return model.rq1(cont, estudio, key)
-
 def get_productoras(catalog, productora):
-    
     productora = model.getMoviebyproductoras(catalog, productora)
     return productora
-

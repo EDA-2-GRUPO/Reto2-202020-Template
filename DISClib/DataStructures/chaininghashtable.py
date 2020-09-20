@@ -86,9 +86,7 @@ def rehash(map_, resize="BIGGER"):
 
 
     if resize == "BIGGER":
-        print("antes", actual_number)
         nuevo = newMap(actual_number * 2, prime, load, cmp)
-        print("despues", nuevo["capacity"])
 
 
     for pos in range(lt.size(map_['table'])):
@@ -97,7 +95,6 @@ def rehash(map_, resize="BIGGER"):
             entry = lt.getElement(bucket, element + 1)
             nuevo = put(nuevo, entry['key'], entry['value'])
 
-    print("2rehash",nuevo["capacity"], nuevo["size"])
 
     return nuevo
 
