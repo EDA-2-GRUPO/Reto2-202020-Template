@@ -50,14 +50,14 @@ def initCatalog():
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def loadData(catalog, booksfile):
+def loadData(catalog, booksfile,cast):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadMovies(catalog, booksfile)
+    loadMovies(catalog, booksfile,cast)
 
 
-def loadMovies(catalog, movies_file):
+def loadMovies(catalog, movies_file,cast):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
@@ -68,9 +68,10 @@ def loadMovies(catalog, movies_file):
     dialect.delimiter = ";"
     movies_file = cf.data_dir + movies_file
     input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"), dialect=dialect)
-    print(type(input_file))
-    for movie in input_file:
-        model.addMovie(catalog, movie)
+    movies_file_cast = cf.data_dir + cast
+    input_file_cast = csv.DictReader(open(movies_file_cast, encoding="utf-8-sig"), dialect=dialect)
+    for movie,movie_cast in zip(input_file,input_file_cast):
+        model.addMovie(catalog, movie,movie_cast)
 def MoviesSize(catalog):
     """Numero de libros leido
     """

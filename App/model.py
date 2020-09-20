@@ -65,14 +65,14 @@ def newCatalog():
 
 
 # Funciones para agregar informacion al catalogo
-def addMovie(catalog, movie):
+def addMovie(catalog, movie, movie_cast):
     """
     Esta funcion adiciona un libro a la lista de libros,
     adicionalmente lo guarda en un Map usando como llave su Id.
     Finalmente crea una entrada en el Map de años, para indicar que este
     libro fue publicaco en ese año.
     """
-    
+    movie=merge_movies(movie, movie_cast)
     lt.addLast(catalog['movies'], movie)
     mp.put(catalog['moviesIds'], int(movie['id']), movie)
     addMovieproductora(catalog, movie)
@@ -150,34 +150,6 @@ def addMovieproductora(catalog, movie):
         pro = newproductora(producmo)
         mp.put(productora, producmo, pro)
     lt.addLast(pro['movies'], movie)
-def newproductora(pubyear):
-    """
-    Esta funcion crea la estructura de libros asociados
-    a un año.
-    """
-    entry = {'productora': "", "movies": None}
-    entry['productora'] = pubyear
-    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
-    return entry
-
-"""def rq1(cont,estudio,key):
-    s = cont["movies"]
-    w=lt.newList('ARRAY_LIST')
-    contador_depel= 0                    #solucion mediante listas
-    promediode_pel=0
-    final=lt.newList('ARRAY_LIST')
-    iterator = it.newIterator(s)
-    while it.hasNext(iterator):
-        element = it.next(iterator)
-        if element[key].lower()==estudio: 
-            promediode_pel+=float(element["vote_average"])
-            lt.addLast(w, element)
-            contador_depel+=1
-    promediode_pel = round(promediode_pel/contador_depel,2)
-    lt.addLast(final, w)
-    lt.addLast(final, contador_depel)
-    lt.addLast(final, promediode_pel)
-    return final"""
 
 # ==============================
 # Funciones de consulta
@@ -228,11 +200,6 @@ def getMoviebyproductoras(catalog, productora):
     if pro:
         return me.getValue(pro)
     return None
-    
-
-
-
-
 def getMoviebyproductoras(catalog, productora):
     """
     Retorna los peliculas publicadas por una productora
@@ -242,7 +209,10 @@ def getMoviebyproductoras(catalog, productora):
         return me.getValue(pro)
     return None
 def merge_movies(moviedetails, cast):
-    return 0
+    for a in cast:
+        if a != "id":
+            moviedetails[a] = cast[a]
+    return moviedetails
     
 
 

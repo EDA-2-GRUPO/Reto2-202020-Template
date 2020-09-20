@@ -102,10 +102,8 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, movies_file)
-        controller.loadData(cont, movies_file_cast)
+        controller.loadData(cont, movies_file, movies_file_cast)
         w=controller.MoviesSize(cont)
-        
         print("Numero de Peliculas cargadas"+str(w))
         
         Printn_Movie(cont,0)
@@ -117,7 +115,6 @@ while True:
         printMoviesbyproductora(movies)
         
     elif int(inputs[0]) == 4:
-        s=cont["productoras"]
-        print(mp.get(s,"Lucasfilm"))
+        nombre = nombre 
     else:
         break
