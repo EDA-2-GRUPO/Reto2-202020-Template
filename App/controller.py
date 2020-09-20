@@ -70,13 +70,19 @@ def loadMovies(catalog, movies_file):
     input_file = csv.DictReader(open(movies_file, encoding="utf-8-sig"), dialect=dialect)
     for movie in input_file:
         model.addMovie(catalog, movie)
+
+
 def MoviesSize(catalog):
     """Numero de libros leido
     """
     return model.MoviesSize(catalog)
-def rq1(cont,estudio,key):
-    return model.rq1(cont,estudio,key)
+
+
+def rq1(cont, estudio, key):
+    return model.rq1(cont, estudio, key)
+
 def get_productoras(catalog, productora):
     
     productora = model.getMoviebyproductoras(catalog, productora)
     return productora
+

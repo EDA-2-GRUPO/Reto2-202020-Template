@@ -63,11 +63,11 @@ def newMap(numelements=17,
                           comparefunction)
 
 
-def rehash(map, resize="BIGGER") -> None:
+def rehash(map, resize="BIGGER"):
     if map['type'] == 'CHAINING':
-        cht.rehash(map, resize)
+        return cht.rehash(map, resize)
     else:
-        pht.rehash(map, resize)
+        return pht.rehash(map, resize)
 
 
 def put(map, key, value):
