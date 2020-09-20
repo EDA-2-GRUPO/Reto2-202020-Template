@@ -74,11 +74,7 @@ def printMoviesbyproductora(movies):
         print('productora encontrada: ' + movies['productora'])
         iterator = it.newIterator(movies['movies'])
         s = 0
-<<<<<<< HEAD
-        w=0
-=======
         w = 0
->>>>>>> 610c046df83011088fd511ce2c1ad21e85a28362
         while it.hasNext(iterator):
             movie = it.next(iterator)
             """print(movie)
@@ -87,13 +83,10 @@ def printMoviesbyproductora(movies):
             w+=1
             s+=float(movie["vote_average"])
             print(movie["original_title"])
-<<<<<<< HEAD
         print(w)
         print(round(s/w,2))    
-=======
         print("Numero de peliculas"+str(w))
         print("vote_average"+str(round(s/w,2)))
->>>>>>> 610c046df83011088fd511ce2c1ad21e85a28362
     else:
         print('No se encontro el autor')
 
@@ -123,9 +116,7 @@ while True:
         print("Cargando...")
         estudio = input("estudio que desea ver\n")
         movies = controller.get_productoras(cont, estudio)
-        printMoviesbyproductora(movies)
-<<<<<<< HEAD
-        
+        printMoviesbyproductora(movies)      
     elif int(inputs[0]) == 4:
         s=cont["productoras"]
         print(mp.get(s,"Lucasfilm"))
@@ -133,7 +124,5 @@ while True:
         """keyskeys= keys.keys()
         print(keyskeys)"""
         
-=======
->>>>>>> 610c046df83011088fd511ce2c1ad21e85a28362
     else:
         break
