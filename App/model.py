@@ -170,8 +170,10 @@ def getMoviesinTagbyName(catalog, tag, name):
 
     pro = mp.get(catalog[tag], name)
     if pro:
-        return {"name": me.getKey(pro), "movies": me.getValue(pro)}
+        movies = me.getValue(pro)
+        return {"name": me.getKey(pro), "movies": me.getValue(pro), "size": lt.size(movies)}
     return None
+
 
 def prom_movies(entry, key):
     """

@@ -59,7 +59,7 @@ def loadData(catalog, file1, file2):
     """
     loadMovies(catalog, file1, file2)
 
-def loadMovies(catalog, n, movies_file1, movies_file2):
+def loadMovies(catalog, movies_file1, movies_file2):
 
     """
     Carga cada una de las lineas del archivo de libros.
@@ -75,7 +75,7 @@ def loadMovies(catalog, n, movies_file1, movies_file2):
     input_file1 = csv.DictReader(open(movies_file1, encoding="utf-8-sig"), dialect=dialect)
     input_file2 = csv.DictReader(open(movies_file2, encoding="utf-8-sig"), dialect=dialect)
     t1 = perf_counter()
-    for movie1, movie2 in zip(input_file1[:n], input_file2):
+    for movie1, movie2 in zip(input_file1, input_file2):
         movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
         model.addMovieproductora(catalog, movie1)
         model.addActor(catalog, movie1)
