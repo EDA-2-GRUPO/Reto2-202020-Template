@@ -52,7 +52,6 @@ def newCatalog():
     """
     catalog = dict()
 
-    catalog['movies'] = lt.newList('SINGLE_LINKED', compareMoviesIds) 
     catalog['moviesIds'] = mp.newMap(300,
                                      maptype='PROBING',
                                      loadfactor=0.4,
@@ -61,6 +60,15 @@ def newCatalog():
                                  maptype='CHAINING',
                                  loadfactor=0.7,
                                  comparefunction=compareMapProductora)
+    catalog['directores'] = mp.newMap(500,
+                                 maptype='CHAINING',
+                                 loadfactor=0.7,
+                                 comparefunction=compareMapProductora)
+    catalog["paises"]= mp.newMap(500,
+                                 maptype='CHAINING',
+                                 loadfactor=0.7,
+                                 comparefunction=compareMapProductora)
+                                                            
     return catalog
 
 
@@ -72,10 +80,11 @@ def addMovie(catalog, movie, movie_cast):
     Finalmente crea una entrada en el Map de años, para indicar que este
     libro fue publicaco en ese año.
     """
-    movie=merge_movies(movie, movie_cast)
-    lt.addLast(catalog['movies'], movie)
-    mp.put(catalog['moviesIds'], int(movie['id']), movie)
+
+    movie.update(movie_cast)
     addMovieproductora(catalog, movie)
+    addMoviedirector(catalog, movie)
+    addMoviepais(catalog,movie)
 
 def compareMapProductora(name, product):
     proentry = me.getKey(product)
@@ -104,6 +113,7 @@ def addMovieproductora(catalog, movie):
         pro = newproductora(producmo)
         mp.put(productora, producmo, pro)
     lt.addLast(pro['movies'], movie)
+    
 def newproductora(pubyear):
     """
     Esta funcion crea la estructura de libros asociados
@@ -114,34 +124,43 @@ def newproductora(pubyear):
     entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
     return entry
 
-"""def rq1(cont,estudio,key):
-    s = cont["movies"]
-    w=lt.newList('ARRAY_LIST')
-    contador_depel= 0                    #solucion mediante listas
-    promediode_pel=0
-    final=lt.newList('ARRAY_LIST')
-    iterator = it.newIterator(s)
-    while it.hasNext(iterator):
-        element = it.next(iterator)
-        if element[key].lower()==estudio: 
-            promediode_pel+=float(element["vote_average"])
-            lt.addLast(w, element)
-            contador_depel+=1
-    promediode_pel = round(promediode_pel/contador_depel,2)
-    lt.addLast(final, w)
-    lt.addLast(final, contador_depel)
-    lt.addLast(final, promediode_pel)
-    return final"""
 
-def addMovieproductora(catalog, movie):
+def addMoviedirector(catalog, movie):
     """
     Esta funcion adiciona un libro a la lista de libros que
     fueron publicados en un año especifico.
     Los años se guardan en un Map, donde la llave es el año
     y el valor la lista de libros de ese año.
     """
-    productora = catalog['productoras']
-    producmo = movie["production_companies"]
+    directores = catalog['directores']
+    director = movie["director_name"]
+    existpro = mp.contains(directores , director)
+    if existpro:
+        entry = mp.get(directores, director)
+        pro = me.getValue(entry)
+    else:
+        pro = newdirector(director)
+        lt.addLast(pro['movies'], movie)
+        mp.put(directores, director, pro)
+    lt.addLast(pro['movies'], movie)
+def newdirector(pubyear):
+    """
+    Esta funcion crea la estructura de libros asociados
+    a un año.
+    """
+    entry = {'director': "", "movies": None}
+    entry['director'] = pubyear
+    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
+    return entry
+def addMoviepais(catalog, movie):
+    """
+    Esta funcion adiciona un libro a la lista de libros que
+    fueron publicados en un año especifico.
+    Los años se guardan en un Map, donde la llave es el año
+    y el valor la lista de libros de ese año.
+    """
+    productora = catalog['paises']
+    producmo = movie["production_countries"]
     existpro = mp.contains(productora, producmo)
     if existpro:
         entry = mp.get(productora, producmo)
@@ -150,7 +169,16 @@ def addMovieproductora(catalog, movie):
         pro = newproductora(producmo)
         mp.put(productora, producmo, pro)
     lt.addLast(pro['movies'], movie)
-
+    
+def newproductora(pubyear):
+    """
+    Esta funcion crea la estructura de libros asociados
+    a un año.
+    """
+    entry = {'pais': "", "movies": None}
+    entry['pais'] = pubyear
+    entry['movies'] = lt.newList('SINGLE_LINKED', compareMapProductora)
+    return entry
 # ==============================
 # Funciones de consulta
 # ==============================
@@ -186,12 +214,10 @@ def compareMapMoviesIds(id, entry):
         return 1
     else:
         return -1
-
-def MoviesSize(catalog):
-    """
+"""def MoviesSize(catalog):
     Número de libros en el catago
-    """
-    return lt.size(catalog['movies'])
+    
+    return lt.size(catalog['movies'])"""
 def getMoviebyproductoras(catalog, productora):
     """
     Retorna los peliculas publicadas por una productora
@@ -213,7 +239,17 @@ def merge_movies(moviedetails, cast):
         if a != "id":
             moviedetails[a] = cast[a]
     return moviedetails
-    
+def getMoviebydirectores(catalog, director):
+    pro = mp.get(catalog["directores"], director)
+    if pro:
+        return me.getValue(pro)
+    return None
+def getMoviebydirectores(catalog, pais):
+    pro = mp.get(catalog["paises"], pais)
+    if pro:
+        return me.getValue(pro)
+    return None
+
 
 
 

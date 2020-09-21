@@ -26,7 +26,7 @@ from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
 from DISClib.ADT import map as mp
-
+from time import perf_counter
 assert config
 
 """
@@ -40,8 +40,8 @@ operación seleccionada.
 #  Ruta a los archivos
 # ___________________________________________________
 
-movies_file = "GoodMovies/SmallMoviesDetailsCleaned.csv"
-movies_file_cast="GoodMovies/MoviesCastingRaw-small.csv"
+movies_file = "GoodMovies/AllMoviesCastingRaw.csv"
+movies_file_cast="GoodMovies/AllMoviesDetailsCleaned.csv"
 
 
 # ___________________________________________________
@@ -85,6 +85,43 @@ def printMoviesbyproductora(movies):
         print(round(s/w,2))    
     else:
         print('No se encontro el autor')
+def printMoviesbyalgo(movies,primer):
+    """
+    Imprime los libros de un autor determinado
+    """
+    if movies:
+        print('productora encontrada: ' + movies[primer])
+        iterator = it.newIterator(movies['movies'])
+        s = 0
+        w=0
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            w+=1
+            s+=float(movie["vote_average"])
+            print(movie["original_title"])
+        print(w)
+        print(round(s/w,2))    
+    else:
+        print('No se encontro el autor')
+def printMoviesbydirector(movies):
+    """
+    Imprime los libros de un autor determinado
+    """
+    if movies:
+        print('productora encontrada: ' + movies['director'])
+        iterator = it.newIterator(movies['movies'])
+        s = 0
+        w=0
+        while it.hasNext(iterator):
+            movie = it.next(iterator)
+            w+=1
+            s+=float(movie["vote_average"])
+            print(movie["original_title"])
+        print(w)
+        print(round(s/w,2))    
+    else:
+        print('No se encontro el autor')
+
 
 
 # ___________________________________________________
@@ -102,19 +139,25 @@ while True:
 
     elif int(inputs[0]) == 2:
         print("Cargando información de los archivos ....")
+        t1_start = perf_counter()
         controller.loadData(cont, movies_file, movies_file_cast)
-        w=controller.MoviesSize(cont)
-        print("Numero de Peliculas cargadas"+str(w))
-        
-        Printn_Movie(cont,0)
-        Printn_Movie(cont,w)
-    elif int(inputs[0]) == 3:
+        t1_stop = perf_counter()
+        """w=controller.MoviesSize(cont)
+        print("Numero de Peliculas cargadas"+str(w))"""
+        print("Tiempo de ejecución ", t1_stop - t1_start, " segundos")
+    elif int(inputs[0]) == 3: 
         print("Cargando...")
         estudio = input("estudio que desea ver\n")
         movies = controller.get_productoras(cont, estudio)
         printMoviesbyproductora(movies)
-        
     elif int(inputs[0]) == 4:
-        nombre = nombre 
+        nombre = input("nombre del director")
+        movies = controller.get_director(cont, nombre)
+        printMoviesbydirector(movies)
+    elif int(inputs[0]) == 8:
+        pais = input("pais peliculas")
+        movies = controller.get_pais(cont, pais)
+        printMoviesbyalgo(movies,"pais")
+        
     else:
         break
