@@ -169,9 +169,9 @@ def getMoviesinTagbyName(catalog, tag, name):
     """
 
     pro = mp.get(catalog[tag], name)
-
-    return pro
-
+    if pro:
+        return {"name": me.getKey(pro), "movies": me.getValue(pro)}
+    return None
 
 def prom_movies(entry, key):
     """

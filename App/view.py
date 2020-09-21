@@ -73,19 +73,19 @@ def max_freq_directors(directores):
     return freq_dato
 
 
-def printMoviesbyIdk(movies, prom, direct=False):
+def printMoviesbyIdk(movies,imprimir, prom, direct=False):
     """
     Imprime los libros de un autor determinado
     """
 
     if movies:
-        print('productora encontrada: ' + me.getKey(movies))
-        movies = me.getValue(movies)
+        print('productora encontrada: ' + movies["name"])
+        movies = movies["movies"]
         iterator = it.newIterator(movies)
         s = 0
         directores = {}
-        w = lt.size(movies)
-        for i in range(w):
+        n = lt.size(movies)
+        for i in range(n):
             movie = it.next(iterator)
             s += float(movie[prom])
             if direct:
@@ -97,8 +97,8 @@ def printMoviesbyIdk(movies, prom, direct=False):
 
             print(movie["original_title"])
 
-        print("Numero de peliculas: ", w)
-        print("vote_average", round(s / w, 2))
+        print("Numero de peliculas: ", n)
+        print("vote_average", round(s / n, 2))
         if direct:
             ml = max_freq_directors(directores)
             print("el director con mayor participacion: {} con {} participaciones".format(ml["director"], ml['veces']))
