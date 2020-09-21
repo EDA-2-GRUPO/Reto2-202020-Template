@@ -246,7 +246,7 @@ def valueSet(map):
     ltset = lt.newList()
     for pos in range(lt.size(map['table'])):
         entry = lt.getElement(map['table'], pos + 1)
-        if (entry['value'] is not None and entry['value'] != '__EMPTY__'):
+        if entry['value'] is not None and entry['value'] != '__EMPTY__':
             lt.addLast(ltset, entry['value'])
     return ltset
 

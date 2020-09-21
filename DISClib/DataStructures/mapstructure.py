@@ -135,7 +135,7 @@ def contains(map, key):
     Raises:
         Exception
     """
-    if (map['type'] == 'CHAINING'):
+    if map['type'] == 'CHAINING':
         return cht.contains(map, key)
     else:
         return pht.contains(map, key)
@@ -150,7 +150,7 @@ def size(map):
     Raises:
         Exception
     """
-    if (map['type'] == 'CHAINING'):
+    if map['type'] == 'CHAINING':
         return cht.size(map)
     else:
         return pht.size(map)

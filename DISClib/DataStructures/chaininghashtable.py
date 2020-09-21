@@ -78,16 +78,17 @@ def newMap(numelements, prime, loadfactor, cmpfunction):
 
 
 def rehash(map_, resize="BIGGER"):
-
     actual_number = map_["size"]
     load = map_["loadfactor"]
     prime = map_["prime"]
     cmp = map_["comparefunction"]
 
-
     if resize == "BIGGER":
         nuevo = newMap(actual_number * 2, prime, load, cmp)
-
+    elif resize == "SMALLER":
+        nuevo = newMap(actual_number / 2, prime, load, cmp)
+    else:
+        return map_
 
     for pos in range(lt.size(map_['table'])):
         bucket = lt.getElement(map_['table'], pos + 1)
@@ -95,15 +96,14 @@ def rehash(map_, resize="BIGGER"):
             entry = lt.getElement(bucket, element + 1)
             nuevo = put(nuevo, entry['key'], entry['value'])
 
-
     return nuevo
 
 
-def contains(map, key):
+def contains(map_, key):
     """ Retorna True si la llave key se encuentra en el map
         o False en caso contrario.
     Args:
-        map: El map a donde se guarda la pareja
+        map_: El map a donde se guarda la pareja
         key: la llave asociada a la pareja
 
     Returns:
@@ -112,8 +112,8 @@ def contains(map, key):
         Exception
     """
 
-    hash = hashValue(map, key)
-    bucket = lt.getElement(map['table'], hash)
+    hash = hashValue(map_, key)
+    bucket = lt.getElement(map_['table'], hash)
     pos = lt.isPresent(bucket, key)
     if pos > 0:
         return True
@@ -122,7 +122,6 @@ def contains(map, key):
 
 
 def put(map_, key, value):
-
     """ Ingresa una pareja llave,valor a la tabla de hash.
     Si la llave ya existe en la tabla, se reemplaza el valor
 
@@ -141,15 +140,14 @@ def put(map_, key, value):
     entry = me.newMapEntry(key, value)
     pos = lt.isPresent(bucket, key)
 
-
     if pos > 0:  # La pareja ya exista, se reemplaza el valor
         lt.changeInfo(bucket, pos, entry)
     else:
         lt.addLast(bucket, entry)  # La llave no existia
         map_['size'] += 1
 
-
     return map_
+
 
 def get(map, key):
     """ Retorna la pareja llave, valor, cuya llave sea igual a key

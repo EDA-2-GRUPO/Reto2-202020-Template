@@ -26,6 +26,7 @@ import csv
 from DISClib.DataStructures import mapstructure as mp
 from DISClib.DataStructures import listiterator as it
 from time import perf_counter
+
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -34,16 +35,17 @@ del modelo en una sola respuesta. Esta responsabilidad
 recae sobre el controlador.
 """
 
+
 # ___________________________________________________
 #  Inicializacion del catalogo
 # ___________________________________________________
 
-def initCatalog(tipo_map, loadfactor):
+def initCatalog(map_type, loadfactor):
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
     # catalog es utilizado para interactuar con el modelo
-    catalog = model.newCatalog(tipo_map, loadfactor)
+    catalog = model.newCatalog(map_type, loadfactor)
     return catalog
 
 
@@ -55,15 +57,15 @@ def loadData(catalog, file1, file2):
     """
     Carga los datos de los archivos en el modelo
     """
-    loadMovies(catalog, file1,file2)
+    loadMovies(catalog, file1, file2)
 
+def loadMovies(catalog, n, movies_file1, movies_file2):
 
-def loadMovies(catalog, movies_file1, movies_file2):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
     - Por cada libro se encuentran sus autores y por cada
-      autor, se crea una lista con sus libros
+      autor, se crea una lista con sus libros>
     """
     dialect = csv.excel()
     dialect.delimiter = ";"
@@ -73,33 +75,16 @@ def loadMovies(catalog, movies_file1, movies_file2):
     input_file1 = csv.DictReader(open(movies_file1, encoding="utf-8-sig"), dialect=dialect)
     input_file2 = csv.DictReader(open(movies_file2, encoding="utf-8-sig"), dialect=dialect)
     t1 = perf_counter()
-    for movie in input_file1:
-        model.add_ids(catalog, movie)
-    t2 = perf_counter()
-    print("id1", t2-t1)
-    t1 = perf_counter()
+    for movie1, movie2 in zip(input_file1[:n], input_file2):
+        movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
+        model.addMovieproductora(catalog, movie1)
+        model.addActor(catalog, movie1)
+        model.addGeneres(catalog, movie1)
 
-    for movie in input_file2:
-        model.add_ids(catalog, movie, False)
-    t2 = perf_counter()
-    print("id2", t2-t1)
-
-    t1 = perf_counter()
-    iterador = it.newIterator(mp.valueSet(catalog["ids"]))
-    ran = mp.size(catalog["ids"])
-    for i in range(ran):
-        movie = it.next(iterador)
-        model.addMovieproductora(catalog, movie)
-        model.addActor(catalog,movie)
     t2 = perf_counter()
     print("adds", t2 - t1)
 
-def MoviesSize(catalog):
-    """Numero de libros leido
-    """
-    return model.MoviesSize(catalog)
 
-
-def get_productoras(catalog, productora):
-    productora = model.getMoviebyproductoras(catalog, productora)
-    return productora
+def get_name(catalog, tag, name):
+    producer = model.getMoviesinTagbyName(catalog, tag, name)
+    return producer

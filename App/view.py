@@ -22,11 +22,12 @@
 
 import sys
 import config
-from DISClib.ADT import list as lt
+from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import liststructure as lt
 from DISClib.DataStructures import listiterator as it
 from App import controller
-from DISClib.ADT import map as mp
 from time import perf_counter
+
 assert config
 
 """
@@ -36,12 +37,10 @@ hace la solicitud al controlador para ejecutar la
 operación seleccionada.
 """
 
+
 # ___________________________________________________
 #  Ruta a los archivos
 # ___________________________________________________
-
-
-
 
 
 # ___________________________________________________
@@ -52,43 +51,58 @@ operación seleccionada.
 
 def printMenu():
     print("Bienvenido")
-    print("1- Inicializar Catálogo")
-    print("2- Cargar información en el catálogo")
-    print("3- Descubrir productoras de cine")
+    print("w-Inicializar Catálogo")
+    print("q-Cargar información en el catálogo")
+    print("1- Descubrir productoras de cine")
     print("0- Salir")
 
 
-# def Printn_Movie(catalog, n):
-#     s = lt.getElement(catalog["movies"], n)
-#     print("id de Pelicula:  " + str(s["id"]))
-#     print("original_title:  " + str(s["original_title"]))
-#     print("release_date: " + str(s["release_date"]))
-#     print("vote_average: " + str(s["vote_average"]))
-#     print("vote_count: " + str(s["vote_count"]))
-#     print("spoken_languages: " + str(s["spoken_languages"]))
+def max_freq_directors(directores):
+    freq_dato = {"director": None, "veces": 0}
+    most = []
+    freq_max = 0
+
+    for dato, freq in directores.items():
+        if freq > freq_max:
+            freq_dato["director"] = [dato]
+            freq_max = freq
+        elif freq == freq_max:
+            most.append(dato)
+
+    freq_dato["veces"] = freq_max
+    return freq_dato
 
 
-def printMoviesbyproductora(movies):
+def printMoviesbyIdk(movies, prom, direct=False):
     """
     Imprime los libros de un autor determinado
     """
+
     if movies:
-        print('productora encontrada: ' + movies['productora'])
-        iterator = it.newIterator(movies['movies'])
+        print('productora encontrada: ' + me.getKey(movies))
+        movies = me.getValue(movies)
+        iterator = it.newIterator(movies)
         s = 0
-        w = 0
-        while it.hasNext(iterator):
+        directores = {}
+        w = lt.size(movies)
+        for i in range(w):
             movie = it.next(iterator)
-            """print(movie)
-            print("----------------------------")
-            print("\n\n\n\n\n\n")"""
-            w += 1
-            s += float(movie["vote_average"])
+            s += float(movie[prom])
+            if direct:
+                drt = movie['director']
+                if directores.get(drt):
+                    directores[drt] += 1
+                else:
+                    directores[drt] = 0
+
             print(movie["original_title"])
-        print(w)
-        print(round(s / w, 2))
-        print("Numero de peliculas" + str(w))
-        print("vote_average" + str(round(s / w, 2)))
+
+        print("Numero de peliculas: ", w)
+        print("vote_average", round(s / w, 2))
+        if direct:
+            ml = max_freq_directors(directores)
+            print("el director con mayor participacion: {} con {} participaciones".format(ml["director"], ml['veces']))
+
     else:
         print('No se encontro el autor')
 
@@ -102,7 +116,7 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     count = dict()
 
-    if int(inputs[0]) == 1:
+    if inputs[0] == "w":
         C1 = input("desea usar el ADT map PROBE: 0, CHAINING: 1 :")
         map_type = "CHAINING" if int(C1) else "PROBE"
         C2 = input("Loadfactor por defecto: 1, Otro: 2")
@@ -119,10 +133,9 @@ while True:
         # cont es el controlador que se usará de acá en adelante
         cont = controller.initCatalog(map_type, loadfactor)
         t2 = perf_counter()
-        print(t2-t1)
+        print(t2 - t1)
 
-    elif int(inputs[0]) == 2:
-
+    elif inputs[0] == "q":
         C1 = input("Datos de prueba: 1, completos: 2")
 
         if C1 == "2":
@@ -138,20 +151,53 @@ while True:
 
         print("Numero de Peliculas cargadas")
 
-
         t2 = perf_counter()
-        print("tiempo de carga:", t2-t1)
+        print("tiempo de carga:", t2 - t1)
+
+    elif int(inputs[0]) == 1:
+        estudio = input("estudio que desea ver\n")
+        print("Cargando...")
+        t1 = perf_counter()
+        movies = controller.get_name(cont, "producers", estudio)
+        printMoviesbyIdk(movies, "vote_average")
+        t2 = perf_counter()
+        print("tiempo req1:", t2 - t1)
+
+    elif int(inputs[0]) == 2:
+        t1 = perf_counter()
+        print("Cargando...")
+        pass
+        t2 = perf_counter()
+        print("tiempo req2:", t2 - t1)
+
     elif int(inputs[0]) == 3:
         print("Cargando...")
-        estudio = input("estudio que desea ver\n")
-        movies = controller.get_productoras(cont, estudio)
-        printMoviesbyproductora(movies)
-    elif int(inputs[0]) == 4:
-        s = cont["productoras"]
-        print(mp.get(s, "Lucasfilm"))
+        t1 = perf_counter()
+        actor = input("actor que quiere consultar\n")
+        movies = controller.get_name(cont, "actors", actor)
+        printMoviesbyIdk(movies, "vote_average")
+        t2 = perf_counter()
+        print("tiempo req3:", t2 - t1)
 
-        """keyskeys= keys.keys()
-        print(keyskeys)"""
+    elif int(inputs[0]) == 4:
+        t1 = perf_counter()
+        print("Cargando...")
+        genero = input("genero que quiere consultar\n")
+        movies = controller.get_name(cont, "genres", genero)
+        printMoviesbyIdk(movies, "vote_average")
+        t2 = perf_counter()
+        print("tiempo req4:", t2 - t1)
+
+    elif int(inputs[0]) == 5:
+        t1 = perf_counter()
+        print("Cargando...")
+        pass
+        t2 = perf_counter()
+        print("tiempo req5:", t2 - t1)
+
+    elif int(inputs[0]) == 0:
+        break
 
     else:
-        break
+        print("Opcion invalida")
+        continue
