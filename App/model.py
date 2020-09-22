@@ -82,12 +82,10 @@ def newCatalog(map_type="CHAINING", loadfactor=None):
 # Funciones para agregar informacion al catalogo
 
 
-def addGeneral(catalog, tag, movie, iterable=None, var_ob=None):
+def addGeneral(catalog, tag, movie, iterable=None):
     map_ = catalog[tag]
 
     for case in iterable:
-        if tag == 'genres':
-            print(case)
         exist_el = mp.contains(map_, case)
         if exist_el:
             entry = mp.get(map_, case)
@@ -194,28 +192,58 @@ def getMoviesinTagbyName(catalog, tag, name):
     return None
 
 
-def prom_movies(entry, key):
-    """
-    entry: dict con llave con el name, y con la llave movies con las movies asociadas
-    key: llave a la que sacaremos promedio de las movies
-    Return: promedio
-    """
-    movies = entry["movies"]
-    iterator = it.newIterator(movies)
-    summation = 0
-    n = lt.size(movies)
-    for i in range(n):
-        movie = it.next(iterator)
-        try:
-            summation += int(movie[key])
-        except ValueError:
-            pass
+def max_freq(dict_freq, name):
+    freq_data = {name: None, "times": 0}
+    most = []
+    freq_max = 0
 
-    if n > 0:
-        return summation / n
+    for data, freq in dict_freq.items():
+        if freq > freq_max:
+            freq_data[name] = [data]
+            freq_max = freq
+        elif freq == freq_max:
+            most.append(data)
+
+    freq_data["times"] = freq_max
+
+    if freq_data[name] is not None and len(freq_data[name]) == 1:
+        freq_data[name] = freq_data[name][0]
+
+    return freq_data
+
+
+def info_movies(movies, var_prom, var_freq=None):
+    if movies:
+        l_movies = movies["movies"]
+        n = movies["size"]
+        iterator = it.newIterator(l_movies)
+        s = 0
+        l_freq = {}
+        for i in range(n):
+            movie = it.next(iterator)
+            s += float(movie[var_prom])
+
+            if var_freq:
+                el = movie[var_freq]
+                if l_freq.get(el):
+                    l_freq[el] += 1
+                else:
+                    l_freq[el] = 1
+
+        if n > 0:
+            info = [s / n]
+        else:
+            print("not movies")
+            return None
+
+        if var_freq:
+            rep = max_freq(l_freq, var_freq)
+            info.append(rep)
+
+        return info
+
     else:
-        print("not movies")
-        return 0
+        return None
 
 
 # ==============================

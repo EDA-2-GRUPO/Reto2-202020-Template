@@ -61,7 +61,7 @@ def initCatalog(map_type, loadfactor):
 #     loadMovies(catalog, file1, file2)
 
 
-def loadData(catalog, movies_file1, movies_file2, n="ALL"):
+def loadData(catalog, movies_file1, movies_file2, n: int = "ALL"):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
@@ -76,17 +76,10 @@ def loadData(catalog, movies_file1, movies_file2, n="ALL"):
     input_file1 = csv.DictReader(open(movies_file1, encoding="utf-8-sig"), dialect=dialect)
     input_file2 = csv.DictReader(open(movies_file2, encoding="utf-8-sig"), dialect=dialect)
 
-    if n == "ALL":
-        seg1 = input_file1
-        seg2 = input_file2
-    else:
-        lar = len(input_file1) - 1
-        t = randint(0, lar)
-        seg1 = input_file1[t-n:t]
-        seg2 = input_file2[t-n:t]
-
-    t1 = perf_counter()
-    for movie1, movie2 in zip(seg1, seg2):
+    count = 0
+    for movie1, movie2 in zip(input_file1, input_file2):
+        if (n != "ALL") and (count > n):
+            break
         movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
         # model.addActor(catalog,movie1)
         # model.addMovieproductora(catalog,movie1)
@@ -105,6 +98,7 @@ def loadData(catalog, movies_file1, movies_file2, n="ALL"):
         model.addGeneral(catalog, 'actors', movie1, actors)
         model.addGeneral(catalog, 'genres', movie1, genres)
 
+        count += 1
     t2 = perf_counter()
     print("adds", t2 - t1)
 
@@ -112,3 +106,7 @@ def loadData(catalog, movies_file1, movies_file2, n="ALL"):
 def get_name(catalog, tag, name):
     producer = model.getMoviesinTagbyName(catalog, tag, name)
     return producer
+
+
+def info_movies(movies, var_prom, var_freq):
+    return model.info_movies(movies, var_prom, var_freq)

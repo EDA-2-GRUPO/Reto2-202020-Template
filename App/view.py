@@ -61,52 +61,6 @@ def printMenu():
     print("0- Salir")
 
 
-def max_freq(dict_freq, name):
-    freq_data = {name: None, "times": 0}
-    most = []
-    freq_max = 0
-
-    for data, freq in dict_freq.items():
-        if freq > freq_max:
-            freq_data[name] = [data]
-            freq_max = freq
-        elif freq == freq_max:
-            most.append(data)
-
-    freq_data["times"] = freq_max
-
-    if freq_data[name] is not None and len(freq_data[name]) == 1:
-        freq_data[name] = freq_data[name][0]
-
-    return freq_data
-
-
-def info_movies(movies, var_prom, var_freq=None):
-    if movies:
-        l_movies = movies["movies"]
-        n = movies["size"]
-        iterator = it.newIterator(l_movies)
-        s = 0
-        l_freq = {}
-        for i in range(n):
-            movie = it.next(iterator)
-            s += float(movie[var_prom])
-
-            if var_freq:
-                el = movie[var_freq]
-                if l_freq.get(el):
-                    l_freq[el] += 1
-                else:
-                    l_freq[el] = 1
-
-        info = [s / n]
-        if var_freq:
-            rep = max_freq(l_freq, var_freq)
-            info.append(rep)
-        return info
-
-    else:
-        return None
 
 
 def printMoviesbyIdk(movies, msg_f, print_list, var_prom, var_freq=None):
@@ -118,7 +72,7 @@ def printMoviesbyIdk(movies, msg_f, print_list, var_prom, var_freq=None):
         print(msg_f + " " + name)
         l_movies = movies["movies"]
         n = movies["size"]
-        info = info_movies(movies, var_prom, var_freq)
+        info = controller.info_movies(movies, var_prom, var_freq)
         iterator = it.newIterator(l_movies)
         for i in range(n):
             movie = it.next(iterator)
@@ -181,9 +135,8 @@ while True:
                 continue
 
         print("Cargando información de los archivos ....")
-        controller.loadData(cont, movies_file1, movies_file2, C1)
+        controller.loadData(cont, movies_file1, movies_file2, n)
 
-        print("Numero de Peliculas cargadas")
 
         t2 = perf_counter()
         print("tiempo de carga:", t2 - t1)
