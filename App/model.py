@@ -21,7 +21,7 @@
  """
 import config
 from DISClib.ADT import list as lt
-from DISClib.ADT import map as mp
+from DISClib.DataStructures import mapstructure as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import listiterator as it
 

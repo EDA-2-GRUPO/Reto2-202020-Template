@@ -90,7 +90,7 @@ def loadData(catalog, movies_file1, movies_file2, n: int = "ALL"):
         procmo = movie1["production_companies"]
         pais = movie1["production_countries"]
         director = movie1["director_name"]
-        
+
         model.addGeneral(catalog, 'producers', movie1, [procmo])
         model.addGeneral(catalog, 'actors', movie1, actors)
         model.addGeneral(catalog, 'genres', movie1, genres)
