@@ -21,9 +21,9 @@
  """
 import config
 from DISClib.ADT import list as lt
-from DISClib.DataStructures import mapstructure as mp
-from DISClib.DataStructures import listiterator as it
+from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
+from DISClib.DataStructures import listiterator as it
 
 assert config
 
@@ -75,6 +75,17 @@ def newCatalog(map_type="CHAINING", loadfactor=None):
                                   maptype=map_type,
                                   loadfactor=loadfactor,
                                   comparefunction=compareMapProductora)
+
+
+
+    catalog['directores'] = mp.newMap(500,
+                                 maptype='CHAINING',
+                                 loadfactor=0.7,
+                                 comparefunction=compareMapProductora)
+    catalog["paises"]= mp.newMap(500,
+                                 maptype='CHAINING',
+                                 loadfactor=0.7,
+                                 comparefunction=compareMapProductora)
 
     return catalog
 
