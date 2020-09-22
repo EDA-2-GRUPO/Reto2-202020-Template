@@ -85,22 +85,20 @@ def loadData(catalog, movies_file1, movies_file2, n: int = "ALL"):
         # model.addMovieproductora(catalog,movie1)
         # model.addGeneres(catalog,movie1)
         #
-        keys_actors = ["actor1_name", "actor2_name", "actor3_name", "actor4_name", "actor5_name"]
-        actors = [movie1[key] for key in keys_actors]
-        #
-        str_generes = movie1['genres']
-        genres = str_generes.split("|")
-        #
+        actors = [movie1[key] for key in ["actor1_name", "actor2_name", "actor3_name", "actor4_name", "actor5_name"]]
+        genres = movie1['genres'].split("|")
         procmo = movie1["production_companies"]
-        #
-
+        pais = movie1["production_countries"]
+        director = movie1["director_name"]
+        
         model.addGeneral(catalog, 'producers', movie1, [procmo])
         model.addGeneral(catalog, 'actors', movie1, actors)
         model.addGeneral(catalog, 'genres', movie1, genres)
+        model.addGeneral(catalog, 'paises', movie1, [pais])
+        model.addGeneral(catalog, 'directores', movie1, [director])
 
         count += 1
-    t2 = perf_counter()
-    print("adds", t2 - t1)
+
 
 
 def get_name(catalog, tag, name):
