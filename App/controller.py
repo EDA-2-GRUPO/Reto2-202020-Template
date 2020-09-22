@@ -26,6 +26,7 @@ import csv
 from DISClib.DataStructures import mapstructure as mp
 from DISClib.DataStructures import listiterator as it
 from time import perf_counter
+from random import randint
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -53,14 +54,14 @@ def initCatalog(map_type, loadfactor):
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def loadData(catalog, file1, file2):
-    """
-    Carga los datos de los archivos en el modelo
-    """
-    loadMovies(catalog, file1, file2)
+# def loadData(catalog, file1, file2):
+#     """
+#     Carga los datos de los archivos en el modelo
+#     """
+#     loadMovies(catalog, file1, file2)
 
 
-def loadMovies(catalog, movies_file1, movies_file2):
+def loadData(catalog, movies_file1, movies_file2, n="ALL"):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
@@ -74,8 +75,18 @@ def loadMovies(catalog, movies_file1, movies_file2):
 
     input_file1 = csv.DictReader(open(movies_file1, encoding="utf-8-sig"), dialect=dialect)
     input_file2 = csv.DictReader(open(movies_file2, encoding="utf-8-sig"), dialect=dialect)
+
+    if n == "ALL":
+        seg1 = input_file1
+        seg2 = input_file2
+    else:
+        lar = len(input_file1) - 1
+        t = randint(0, lar)
+        seg1 = input_file1[t-n:t]
+        seg2 = input_file2[t-n:t]
+
     t1 = perf_counter()
-    for movie1, movie2 in zip(input_file1, input_file2):
+    for movie1, movie2 in zip(seg1, seg2):
         movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
         # model.addActor(catalog,movie1)
         # model.addMovieproductora(catalog,movie1)

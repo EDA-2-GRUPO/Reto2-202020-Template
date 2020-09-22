@@ -98,7 +98,6 @@ def info_movies(movies, var_prom, var_freq=None):
                     l_freq[el] += 1
                 else:
                     l_freq[el] = 1
-                print(l_freq)
 
         info = [s / n]
         if var_freq:
@@ -144,104 +143,101 @@ def printMoviesbyIdk(movies, msg_f, print_list, var_prom, var_freq=None):
 #  Menu principal
 # ___________________________________________________
 
-def main():
-    cont = dict()
-    global cont
-    while True:
-        printMenu()
-        inputs = input('Seleccione una opción para continuar\n')
-        if inputs[0] == "w":
-            C1 = input("desea usar el ADT map PROBE: 0, CHAINING: 1 :")
-            map_type = "CHAINING" if int(C1) else "PROBE"
-            C2 = input("Loadfactor por defecto: 1, Otro: 2")
-            if C2 == "2":
-                print("recuerde que para map PROBE el loadfactor no debe superar")
-                C3 = input("Ingrese en valor de loadfactor")
-                loadfactor = float(C3)
 
-            else:
-                loadfactor = None
-
-            t1 = perf_counter()
-            print("Inicializando Catálogo ....")
-            # cont es el controlador que se usará de acá en adelante
-            cont = controller.initCatalog(map_type, loadfactor)
-            t2 = perf_counter()
-            print(t2 - t1)
-
-        elif inputs[0] == "q":
-            C1 = input("Datos de prueba: 1, completos: 2")
-
-            if C1 == "2":
-                movies_file1 = "GoodMovies/AllMoviesDetailsCleaned.csv"
-                movies_file2 = "GoodMovies/AllMoviesCastingRaw.csv"
-            else:
-                movies_file1 = "GoodMovies/SmallMoviesDetailsCleaned.csv"
-                movies_file2 = "GoodMovies/MoviesCastingRaw-small.csv"
-            t1 = perf_counter()
-
-            print("Cargando información de los archivos ....")
-            controller.loadData(cont, movies_file1, movies_file2)
-
-            print("Numero de Peliculas cargadas")
-
-            t2 = perf_counter()
-            print("tiempo de carga:", t2 - t1)
-
-        elif int(inputs[0]) == 1:
-            estudio = input("estudio que desea ver\n")
-            t1 = perf_counter()
-            print("Cargando...")
-            msf = "Se he encontrado al estudio"
-            print_1 = ["original_title", "vote_average"]
-            movies = controller.get_name(cont, "producers", estudio)
-            printMoviesbyIdk(movies, msf, print_1, "vote_average")
-            t2 = perf_counter()
-            print("tiempo req1:", t2 - t1)
-
-        elif int(inputs[0]) == 2:
-            t1 = perf_counter()
-            print("Cargando...")
-            pass
-            t2 = perf_counter()
-            print("tiempo req2:", t2 - t1)
-
-        elif int(inputs[0]) == 3:
-            actor = input("actor que quiere consultar\n")
-            print("Cargando...")
-            t1 = perf_counter()
-            msf = "Se he encontrado al actor/actriz"
-            print_1 = ["original_title", "vote_average"]
-            movies = controller.get_name(cont, "actors", actor)
-            printMoviesbyIdk(movies, msf, print_1, "vote_average", "director_name")
-            t2 = perf_counter()
-            print("tiempo req3:", t2 - t1)
-
-        elif int(inputs[0]) == 4:
-            genero = input("genero que quiere consultar\n")
-            t1 = perf_counter()
-            print("Cargando...")
-            msf = "Se he encontrado el genero"
-            print_1 = ["original_title", "vote_average"]
-            movies = controller.get_name(cont, "genres", genero)
-            printMoviesbyIdk(movies, msf, print_1, "vote_average")
-            t2 = perf_counter()
-            print("tiempo req4:", t2 - t1)
-
-        elif int(inputs[0]) == 5:
-            t1 = perf_counter()
-            print("Cargando...")
-            pass
-            t2 = perf_counter()
-            print("tiempo req5:", t2 - t1)
-
-        elif int(inputs[0]) == 0:
-            break
+while True:
+    printMenu()
+    inputs = input('Seleccione una opción para continuar\n')
+    if inputs[0] == "w":
+        C1 = input("desea usar el ADT map PROBE: 0, CHAINING: 1 :")
+        map_type = "CHAINING" if int(C1) else "PROBE"
+        C2 = input("Loadfactor por defecto: 1, Otro: 2")
+        if C2 == "2":
+            print("recuerde que para map PROBE el loadfactor no debe superar")
+            C3 = input("Ingrese en valor de loadfactor")
+            loadfactor = float(C3)
 
         else:
-            print("Opcion invalida")
-            continue
+            loadfactor = None
 
+        t1 = perf_counter()
+        print("Inicializando Catálogo ....")
+        # cont es el controlador que se usará de acá en adelante
+        cont = controller.initCatalog(map_type, loadfactor)
+        t2 = perf_counter()
+        print(t2 - t1)
 
-if __name__ == '__main__':
-    main()
+    elif inputs[0] == "q":
+        C1 = input("numero de elementos que quiere cargar, enter si desea todos")
+        t1 = perf_counter()
+        movies_file1 = "GoodMovies/AllMoviesDetailsCleaned.csv"
+        movies_file2 = "GoodMovies/AllMoviesCastingRaw.csv"
+        if C1 == "":
+            n = "ALL"
+        else:
+            try:
+                n = int(C1)
+            except ValueError:
+                print("numero no valido")
+                continue
+
+        print("Cargando información de los archivos ....")
+        controller.loadData(cont, movies_file1, movies_file2, C1)
+
+        print("Numero de Peliculas cargadas")
+
+        t2 = perf_counter()
+        print("tiempo de carga:", t2 - t1)
+
+    elif int(inputs[0]) == 1:
+        estudio = input("estudio que desea ver\n")
+        t1 = perf_counter()
+        print("Cargando...")
+        msf = "Se he encontrado al estudio"
+        print_1 = ["original_title", "vote_average"]
+        movies = controller.get_name(cont, "producers", estudio)
+        printMoviesbyIdk(movies, msf, print_1, "vote_average")
+        t2 = perf_counter()
+        print("tiempo req1:", t2 - t1)
+
+    elif int(inputs[0]) == 2:
+        t1 = perf_counter()
+        print("Cargando...")
+        pass
+        t2 = perf_counter()
+        print("tiempo req2:", t2 - t1)
+
+    elif int(inputs[0]) == 3:
+        actor = input("actor que quiere consultar\n")
+        print("Cargando...")
+        t1 = perf_counter()
+        msf = "Se he encontrado al actor/actriz"
+        print_1 = ["original_title", "vote_average"]
+        movies = controller.get_name(cont, "actors", actor)
+        printMoviesbyIdk(movies, msf, print_1, "vote_average", "director_name")
+        t2 = perf_counter()
+        print("tiempo req3:", t2 - t1)
+
+    elif int(inputs[0]) == 4:
+        genero = input("genero que quiere consultar\n")
+        t1 = perf_counter()
+        print("Cargando...")
+        msf = "Se he encontrado el genero"
+        print_1 = ["original_title", "vote_average"]
+        movies = controller.get_name(cont, "genres", genero)
+        printMoviesbyIdk(movies, msf, print_1, "vote_average")
+        t2 = perf_counter()
+        print("tiempo req4:", t2 - t1)
+
+    elif int(inputs[0]) == 5:
+        t1 = perf_counter()
+        print("Cargando...")
+        pass
+        t2 = perf_counter()
+        print("tiempo req5:", t2 - t1)
+
+    elif int(inputs[0]) == 0:
+        break
+
+    else:
+        print("Opcion invalida")
+        continue
