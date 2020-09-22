@@ -82,6 +82,25 @@ def newCatalog(map_type="CHAINING", loadfactor=None):
 # Funciones para agregar informacion al catalogo
 
 
+def addGeneral(catalog, tag, movie, iterable=None, var_ob=None):
+    map_ = catalog[tag]
+
+    for case in iterable:
+        if tag == 'genres':
+            print(case)
+        exist_el = mp.contains(map_, case)
+        if exist_el:
+            entry = mp.get(map_, case)
+            ele = me.getValue(entry)
+        else:
+            ele = lt.newList('SINGLE_LINKED', compareMovieName)
+            mp.put(map_, case, ele)
+            if map_['size'] / map_['capacity'] > map_['loadfactor']:
+                catalog[tag] = mp.rehash(map_)
+
+        lt.addLast(ele, movie)
+
+
 def addMovieproductora(catalog, movie):
     """
     Esta funcion adiciona un libro a la lista de libros que

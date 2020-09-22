@@ -59,8 +59,8 @@ def loadData(catalog, file1, file2):
     """
     loadMovies(catalog, file1, file2)
 
-def loadMovies(catalog, movies_file1, movies_file2):
 
+def loadMovies(catalog, movies_file1, movies_file2):
     """
     Carga cada una de las lineas del archivo de libros.
     - Se agrega cada libro al catalogo de libros
@@ -77,9 +77,22 @@ def loadMovies(catalog, movies_file1, movies_file2):
     t1 = perf_counter()
     for movie1, movie2 in zip(input_file1, input_file2):
         movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
-        model.addMovieproductora(catalog, movie1)
-        model.addActor(catalog, movie1)
-        model.addGeneres(catalog, movie1)
+        # model.addActor(catalog,movie1)
+        # model.addMovieproductora(catalog,movie1)
+        # model.addGeneres(catalog,movie1)
+        #
+        keys_actors = ["actor1_name", "actor2_name", "actor3_name", "actor4_name", "actor5_name"]
+        actors = [movie1[key] for key in keys_actors]
+        #
+        str_generes = movie1['genres']
+        genres = str_generes.split("|")
+        #
+        procmo = movie1["production_companies"]
+        #
+
+        model.addGeneral(catalog, 'producers', movie1, [procmo])
+        model.addGeneral(catalog, 'actors', movie1, actors)
+        model.addGeneral(catalog, 'genres', movie1, genres)
 
     t2 = perf_counter()
     print("adds", t2 - t1)
