@@ -153,9 +153,13 @@ while True:
         print("tiempo req1:", t2 - t1)
 
     elif int(inputs[0]) == 2:
+        director = input("director que desea ver\n")
         t1 = perf_counter()
         print("Cargando...")
-        pass
+        msf = "Se he encontrado al director"
+        print_1 = ["original_title", "vote_average"]
+        movies = controller.get_name(cont, 'directores', director)
+        printMoviesbyIdk(movies, msf, print_1, "vote_average")
         t2 = perf_counter()
         print("tiempo req2:", t2 - t1)
 
@@ -182,9 +186,13 @@ while True:
         print("tiempo req4:", t2 - t1)
 
     elif int(inputs[0]) == 5:
+        pais = input("pais que quiere consultar\n")
         t1 = perf_counter()
         print("Cargando...")
-        pass
+        msf = "Se he encontrado el pais"
+        print_1 = ["original_title", "vote_average"]
+        movies = controller.get_name(cont, "paises", pais)
+        printMoviesbyIdk(movies, msf, print_1, "vote_average")
         t2 = perf_counter()
         print("tiempo req5:", t2 - t1)
 

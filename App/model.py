@@ -153,9 +153,10 @@ def addMoviedirector(catalog, movie):
         pro = me.getValue(entry)
     else:
         pro = lt.newList('SINGLE_LINKED', compareMovieName)
-        lt.addLast(pro['movies'], movie)
         mp.put(directores, director, pro)
-    lt.addLast(pro['movies'], movie)
+        if directores['size'] / directores['capacity'] > directores['loadfactor']:
+                catalog['directores'] = mp.rehash(directores)
+    lt.addLast(pro, movie)
 
 
 def addActor(catalog, movie):
@@ -206,7 +207,6 @@ def addGeneres(catalog, movie):
             mp.put(c_generes, genre, gen)
             if c_generes['size'] / c_generes['capacity'] > c_generes['loadfactor']:
                 catalog['genres'] = mp.rehash(c_generes)
-
         lt.addLast(gen, movie)
 
 
@@ -226,7 +226,9 @@ def addMoviepais(catalog, movie):
     else:
         pro = lt.newList('SINGLE_LINKED', compareMovieName)
         mp.put(productora, producmo, pro)
-    lt.addLast(pro['movies'], movie)
+        if productora['size'] / productora['capacity'] > productora['loadfactor']:
+                catalog["paises"] = mp.rehash(productora)
+    lt.addLast(pro, movie)
 
 
 # ==============================
