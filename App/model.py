@@ -76,21 +76,20 @@ def newCatalog(map_type="CHAINING", loadfactor=None):
                                   loadfactor=loadfactor,
                                   comparefunction=compareMapProductora)
 
-
     catalog['directores'] = mp.newMap(500,
-                                 maptype='CHAINING',
-                                 loadfactor=0.7,
-                                 comparefunction=compareMapProductora)
-    catalog["paises"]= mp.newMap(500,
-                                 maptype='CHAINING',
-                                 loadfactor=0.7,
-                                 comparefunction=compareMapProductora)
+                                      maptype='CHAINING',
+                                      loadfactor=0.7,
+                                      comparefunction=compareMapProductora)
+    catalog["paises"] = mp.newMap(500,
+                                  maptype='CHAINING',
+                                  loadfactor=0.7,
+                                  comparefunction=compareMapProductora)
 
     return catalog
 
 
 # Funciones para agregar informacion al catalogo
-def addMovie(catalog, movie, movie_cast):
+def addMovie(catalog, movie):
     """
     Esta funcion adiciona un libro a la lista de libros,
     adicionalmente lo guarda en un Map usando como llave su Id.
@@ -98,10 +97,12 @@ def addMovie(catalog, movie, movie_cast):
     libro fue publicaco en ese año.
     """
 
-    movie.update(movie_cast)
     addMovieproductora(catalog, movie)
     addMoviedirector(catalog, movie)
-    addMoviepais(catalog,movie)
+    addActor(catalog, movie)
+    addGeneres(catalog, movie)
+    addMoviepais(catalog, movie)
+
 
 def compareMapProductora(name, product):
     proentry = me.getKey(product)
@@ -146,16 +147,15 @@ def addMoviedirector(catalog, movie):
     """
     directores = catalog['directores']
     director = movie["director_name"]
-    existpro = mp.contains(directores , director)
+    existpro = mp.contains(directores, director)
     if existpro:
         entry = mp.get(directores, director)
         pro = me.getValue(entry)
     else:
-        pro = newdirector(director)
+        pro = lt.newList('SINGLE_LINKED', compareMovieName)
         lt.addLast(pro['movies'], movie)
         mp.put(directores, director, pro)
     lt.addLast(pro['movies'], movie)
-
 
 
 def addActor(catalog, movie):
@@ -209,6 +209,7 @@ def addGeneres(catalog, movie):
 
         lt.addLast(gen, movie)
 
+
 def addMoviepais(catalog, movie):
     """
     Esta funcion adiciona un libro a la lista de libros que
@@ -223,9 +224,11 @@ def addMoviepais(catalog, movie):
         entry = mp.get(productora, producmo)
         pro = me.getValue(entry)
     else:
-        pro = newproductora(producmo)
+        pro = lt.newList('SINGLE_LINKED', compareMovieName)
         mp.put(productora, producmo, pro)
     lt.addLast(pro['movies'], movie)
+
+
 # ==============================
 # Funciones de consulta
 # ==============================
