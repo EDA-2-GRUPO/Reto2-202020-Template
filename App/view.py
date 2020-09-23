@@ -54,10 +54,6 @@ def printMenu():
     print("w-Inicializar Catálogo")
     print("q-Cargar información en el catálogo")
     print("1- Descubrir productoras de cine")
-    print("2- Conocer a un director")
-    print("3- Conocer a un actor")
-    print("4- Entender un género")
-    print("5-Encontrar películas por país")
     print("0- Salir")
 
 
@@ -146,7 +142,6 @@ def printMoviesbyIdk(movies, msg_f, print_list, var_prom, var_freq=None):
 
 def main():
     cont = dict()
-    global cont
     while True:
         printMenu()
         inputs = input('Seleccione una opción para continuar\n')
