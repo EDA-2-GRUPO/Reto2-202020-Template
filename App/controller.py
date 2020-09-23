@@ -53,12 +53,7 @@ def initCatalog(map_type, loadfactor):
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
-# ___________________________________________________
-# def loadData(catalog, file1, file2):
-#     """
-#     Carga los datos de los archivos en el modelo
-#     """
-#     loadMovies(catalog, file1, file2)
+# __________________________________________________
 
 
 def loadData(catalog, movies_file1, movies_file2, n: int = "ALL"):
@@ -81,10 +76,7 @@ def loadData(catalog, movies_file1, movies_file2, n: int = "ALL"):
         if (n != "ALL") and (count > n):
             break
         movie1.update(movie2)  # se que es severo machetazo :V, lo sugirio  erich
-        # model.addActor(catalog,movie1)
-        # model.addMovieproductora(catalog,movie1)
-        # model.addGeneres(catalog,movie1)
-        #
+
         actors = [movie1[key] for key in ["actor1_name", "actor2_name", "actor3_name", "actor4_name", "actor5_name"]]
         genres = movie1['genres'].split("|")
         procmo = movie1["production_companies"]
