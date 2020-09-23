@@ -142,8 +142,6 @@ while True:
         t1_start = perf_counter()
         controller.loadData(cont, movies_file, movies_file_cast)
         t1_stop = perf_counter()
-        """w=controller.MoviesSize(cont)
-        print("Numero de Peliculas cargadas"+str(w))"""
         print("Tiempo de ejecución ", t1_stop - t1_start, " segundos")
     elif int(inputs[0]) == 3: 
         print("Cargando...")
