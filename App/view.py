@@ -80,7 +80,6 @@ def printMoviesbyIdk(movies, msg_f, print_list, var_prom, var_freq=None):
             for el_print in print_list:
                 print_m += movie[el_print] + ",  "
             print(print_m)
-
         print("Numero de peliculas: ", n)
         print(var_prom, ": ", round(info[0], 2))
 
@@ -190,7 +189,7 @@ while True:
         t1 = perf_counter()
         print("Cargando...")
         msf = "Se he encontrado el pais"
-        print_1 = ["original_title", "vote_average"]
+        print_1 = ["original_title", "vote_average","release_date","director_name"]
         movies = controller.get_name(cont, "paises", pais)
         printMoviesbyIdk(movies, msf, print_1, "vote_average")
         t2 = perf_counter()
